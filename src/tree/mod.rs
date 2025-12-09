@@ -781,6 +781,7 @@ impl Tree {
         Ok(tree)
     }
 
+    #[expect(dead_code)]
     pub(crate) fn consume_writer(
         &self,
         writer: crate::table::Writer,

@@ -156,7 +156,6 @@ impl<'a, Item: Decodable<Parsed>, Parsed: ParsedItem<Item>> Decoder<'a, Item, Pa
 
         // SAFETY: pos is always retrieved from the binary index,
         // which we consider to be trustworthy
-        #[warn(unsafe_code)]
         let mut cursor = Cursor::new(unsafe { bytes.get_unchecked(pos..) });
 
         Item::parse_restart_key(&mut cursor, pos, bytes).expect("should exist")
@@ -360,7 +359,6 @@ impl<'a, Item: Decodable<Parsed>, Parsed: ParsedItem<Item>> Decoder<'a, Item, Pa
 
             // SAFETY: The cursor is advanced by read_ operations which check for EOF,
             // And the cursor starts at 0 - the slice is never empty
-            #[warn(unsafe_code)]
             let mut reader = Cursor::new(unsafe { self.block.data.get_unchecked(offset..) });
 
             if Item::parse_full(&mut reader, offset)
@@ -379,7 +377,6 @@ impl<'a, Item: Decodable<Parsed>, Parsed: ParsedItem<Item>> Decoder<'a, Item, Pa
 
             // SAFETY: The cursor is advanced by read_ operations which check for EOF,
             // And the cursor starts at 0 - the slice is never empty
-            #[warn(unsafe_code)]
             let mut reader = Cursor::new(unsafe { self.block.data.get_unchecked(offset..) });
 
             if Item::parse_truncated(
@@ -412,7 +409,6 @@ impl<'a, Item: Decodable<Parsed>, Parsed: ParsedItem<Item>> Decoder<'a, Item, Pa
 
         // SAFETY: The cursor is advanced by read_ operations which check for EOF,
         // And the cursor starts at 0 - the slice is never empty
-        #[warn(unsafe_code)]
         let mut reader = Cursor::new(unsafe { self.block.data.get_unchecked(offset..) });
 
         Self::parse_current_item(
@@ -438,7 +434,6 @@ impl<Item: Decodable<Parsed>, Parsed: ParsedItem<Item>> Iterator for Decoder<'_,
 
         // SAFETY: The cursor is advanced by read_ operations which check for EOF,
         // And the cursor starts at 0 - the slice is never empty
-        #[warn(unsafe_code)]
         let mut reader =
             Cursor::new(unsafe { self.block.data.get_unchecked(self.lo_scanner.offset..) });
 

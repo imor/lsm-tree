@@ -12,6 +12,7 @@ use std::{
 };
 
 pub type RangeItem = crate::Result<KvPair>;
+pub type FlushTablesResult = (Vec<Table>, Option<Vec<BlobFile>>);
 
 /// Generic Tree API
 #[enum_dispatch::enum_dispatch]
@@ -203,7 +204,6 @@ pub trait AbstractTree {
 
     /// Acquires the flush lock which is required to call [`Tree::flush`].
     fn get_flush_lock(&self) -> MutexGuard<'_, ()>;
-
     /// Synchronously flushes a memtable to a table.
     ///
     /// This method will not make the table immediately available,
@@ -212,11 +212,10 @@ pub trait AbstractTree {
     /// # Errors
     ///
     /// Will return `Err` if an IO error occurs.
-    #[warn(clippy::type_complexity)]
     fn flush_to_tables(
         &self,
         stream: impl Iterator<Item = crate::Result<InternalValue>>,
-    ) -> crate::Result<Option<(Vec<Table>, Option<Vec<BlobFile>>)>>;
+    ) -> crate::Result<Option<FlushTablesResult>>;
 
     /// Atomically registers flushed tables into the tree, removing their associated sealed memtables.
     ///
